@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { trpc } from '../utils/trpc';
 import { debounce } from 'lodash';
 
@@ -9,10 +9,8 @@ type Form = {
 };
 
 const CreateLinkForm: NextPage = () => {
-  const [form, setForm] = useState<Form>({
-    slug: '',
-    url: '',
-  });
+  const [created, setCreated] = useState<boolean>(false);
+  const [form, setForm] = useState<Form>({ slug: '', url: '' });
   const url = window.location.origin;
 
   const slugCheck = trpc.useQuery(['slugCheck', { slug: form.slug }], {
@@ -23,7 +21,11 @@ const CreateLinkForm: NextPage = () => {
 
   const createSlug = trpc.useMutation(['createSlug']);
 
-  if (createSlug.status === 'success') {
+  useEffect(() => {
+    setCreated(createSlug.status === 'success');
+  }, [createSlug.status]);
+
+  if (created) {
     return (
       <div className="flex flex-col justify-center items-center">
         <span className="font-mono text-5xl">
@@ -33,7 +35,7 @@ const CreateLinkForm: NextPage = () => {
           {url}/{form.slug}
         </a>
         <button
-          onClick={() => (window.location.href = url)}
+          onClick={() => setCreated(false)}
           disabled={slugCheck.isFetched && slugCheck.data?.used}
           className="mt-5 w-full bg-green-400 disabled:bg-gray-600 hover:bg-green-500 text-gray-950 px-5 py-2 text-sm leading-5 rounded-full font-semibold text-white cursor-pointer mt-1"
         >
