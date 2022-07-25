@@ -37,7 +37,7 @@ const CreateLinkForm: NextPage = () => {
         <button
           onClick={() => setCreated(false)}
           disabled={slugCheck.isFetched && slugCheck.data?.used}
-          className="mt-5 w-full bg-green-400 disabled:bg-gray-600 hover:bg-green-500 text-gray-950 px-5 py-2 text-sm leading-5 rounded-full font-semibold text-white cursor-pointer mt-1"
+          className="mt-10 w-full bg-green-400 disabled:bg-gray-600 hover:bg-green-500 text-gray-950 px-5 py-2 text-sm leading-5 rounded-full font-semibold text-white cursor-pointer mt-1"
         >
           Create another short URL
         </button>
